@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "Training Listing";
+    var pagedList = (IPagedList)ViewBag.OnePageOfTrainings;
+
+}
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Common;
+
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+<a asp-action="Create" asp-controller="SwimmerTraining" class="btn btn-outline-info">Create</a>
+<a asp-action="Update" asp-controller="SwimmerTraining" class="btn btn-outline-info">Edit</a>
+
+<table class="table">
+
+    <tr><td>Id</td><td>First Name</td><td>Last Name</td><td>Date</td><td>Style</td><td>Distance</td><td>Actions</td></tr>
+
+    @foreach (var item in ViewBag.OnePageOfTrainings)
+    {
+        <tr>
+            <td>@item.TrainingId</td>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td>@item.TrainingDate</td>
+            <td>@item.Style</td>
+            <td>@item.Distance</td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.TrainingId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.TrainingId }) |
+                @Html.ActionLink("Delete", "Delete", "SwimmerTraining", new { id = item.TrainingId }, new { @class = "compItem" })
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfTrainings, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+{
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" }
+})
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
